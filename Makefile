@@ -1,3 +1,3 @@
 .PHONY: check
-check: test/*.sh
+check: bin/uri test/*.sh
 	@./test/runner

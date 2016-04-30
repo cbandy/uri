@@ -1,0 +1,38 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+require 'uri'
+
+components = Array.new
+opts = OptionParser.new do |opts|
+  opts.separator 'Set or reset particular components:'
+  opts.separator ''
+  opts.on('-h VALUE', '--host'    ) { |v| components << [:host    , v] }
+  opts.on('-o VALUE', '--port'    ) { |v| components << [:port    , v] }
+  opts.on('-P VALUE', '--password') { |v| components << [:password, v] }
+  opts.on('-u VALUE', '--user'    ) { |v| components << [:user    , v] }
+  opts.separator ''
+  opts.on('-F VALUE', '--fragment') { |v| components << [:fragment, v] }
+  opts.on('-p VALUE', '--path'    ) { |v| components << [:path    , v] }
+  opts.on('-q VALUE', '--query'   ) { |v| components << [:query   , v] }
+  opts.on('-s VALUE', '--scheme'  ) { |v| components << [:scheme  , v] }
+end
+
+module Main
+  def self.manipulate(components, uri)
+    components.each do |(component, value)|
+      case component
+      when :port
+        uri.port = Integer(value)
+      else
+        uri.send(:"#{component}=", value)
+      end
+    end
+  end
+end
+
+opts.order! do |arg|
+  uri = URI(arg)
+  Main.manipulate(components, uri)
+  puts uri.to_s
+end

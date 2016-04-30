@@ -1,4 +1,8 @@
-language: generic
+language: ruby
+rvm:
+  - 2.1
+  - 2.2
+  - 2.3.0 # travis-ci/travis-ci#5361
 
 addons:
   apt:
