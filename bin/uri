@@ -16,6 +16,7 @@ opts = OptionParser.new do |opts|
   opts.on('-p VALUE', '--path'    ) { |v| components << [:path    , v] }
   opts.on('-q VALUE', '--query'   ) { |v| components << [:query   , v] }
   opts.on('-s VALUE', '--scheme'  ) { |v| components << [:scheme  , v] }
+  opts.separator ''
 end
 
 module Main
@@ -31,7 +32,14 @@ module Main
   end
 end
 
-opts.order! do |arg|
+opts.order!
+
+if ARGV.empty?
+  opts.display
+  exit 2
+end
+
+ARGV.each do |arg|
   uri = URI(arg)
   Main.manipulate(components, uri)
   puts uri.to_s
